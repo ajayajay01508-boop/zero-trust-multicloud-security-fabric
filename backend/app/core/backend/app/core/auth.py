@@ -1,15 +1,12 @@
-"""
-Zero Trust Authentication Module
-Every request must prove identity
-"""
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 
-def verify_identity(token: str) -> bool:
-    """
-    Simulated identity verification
-    In real systems: JWT, OAuth, mTLS
-    """
-    if not token:
-        return False
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-    trusted_tokens = ["trusted-service-token", "admin-token"]
-    return token in trusted_tokens
+def zero_trust_auth(token: str = Depends(oauth2_scheme)):
+    if token != "trusted-device-token":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Zero Trust: Access Denied",
+        )
+    return {"device": "trusted", "access": "granted"}
