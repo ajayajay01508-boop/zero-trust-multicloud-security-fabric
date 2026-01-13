@@ -1,29 +1,36 @@
-# zero-trust-multicloud-security-fabric 
+# AUREXIA
 
-**Enterprise-grade Zero Trust Multi-Cloud Security Control Plane Application
+## AI-Native Zero Trust Security Fabric
 
-## Overview
-This project implements an enterprise-grade Zero-Trust Security Control Plane
-that enforces identity-centric, policy-based access across AWS, Azure, and GCP.
+Aurexia is an enterprise-grade security platform that enforces Zero Trust principles across multi-cloud and AI-driven systems.
 
-The system removes implicit network trust and applies continuous verification
-using OAuth 2.0, OpenID Connect, mTLS, and Policy-as-Code.
+## Why Aurexia?
+Modern enterprises require security that is:
+- Identity-first
+- Policy-driven
+- Cloud-agnostic
+- AI-aware
 
-## Architecture
-User
-→ Security Dashboard (Frontend)  
-→ Zero-Trust Control Plane Backend  
-→ Policy Decision Engine (OPA)  
-→ Zero-Trust Access Proxy (Envoy)  
-→ AWS | Azure | GCP Services
+Aurexia provides a unified control plane for authentication, authorization, policy enforcement, and auditability.
 
-## Key Components
-- Frontend: Security Control Dashboard
-- Backend: Zero-Trust Control Plane API
-- Identity: Keycloak
-- Policy: Open Policy Agent (OPA)
-- Proxy: Envoy
-- Runtime Security: Vault, Falco
+## Core Capabilities
+- Zero Trust API Gateway
+- JWT-based Authentication
+- Role-Based Access Control (RBAC)
+- Policy Decision Engine
+- Continuous Audit Logging
+- Multi-Cloud Ready Architecture
 
-## Project Status
-Phase 0 completed –  architecture & project Foundation initialized.
+## Technology Stack
+- FastAPI (Backend)
+- Python
+- JWT
+- Custom Policy Engine
+- GitHub (CI/CD Ready)
+
+## Vision
+To become the default Zero Trust security layer for AI and cloud-native enterprises.
+
+---
+🚀 Aurexia is under active development.
+
