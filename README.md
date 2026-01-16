@@ -20,6 +20,7 @@ Aurexia provides a unified control plane for authentication, authorization, poli
 - Policy Decision Engine
 - Continuous Audit Logging
 - Multi-Cloud Ready Architecture
+<<<<<<< HEAD
 
 ## Technology Stack
 - FastAPI (Backend)
@@ -46,3 +47,19 @@ Aurexia provides a unified control plane for authentication, authorization, poli
 ```bash
 git clone https://github.com/ajayajay01508/zero-trust-multicloud-security-fabric.git
 cd zero-trust-multicloud-security-fabric
+=======
+
+## Technology Stack
+- FastAPI (Backend)
+- Python
+- JWT
+- Custom Policy Engine
+- GitHub (CI/CD Ready)
+
+## Vision
+To become the default Zero Trust security layer for AI and cloud-native enterprises.
+
+---
+🚀 Aurexia is under active development.
+
+>>>>>>> 28d758bb4fe079f977799eead6c72d4c7fed59e2
