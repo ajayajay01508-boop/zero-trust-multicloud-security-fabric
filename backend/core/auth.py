@@ -1,38 +1,33 @@
-"""
-Phase 2 – Identity-Aware Authentication
-Zero Trust: Never trust, always verify
-"""
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-import jwt
-import datetime
-from typing import Dict
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-SECRET_KEY = "CHANGE_ME_TO_SECURE_KEY"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+# 🔐 OAuth2 scheme (THIS enables Authorize button)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
+# Dummy user
+FAKE_USER = {
+    "username": "admin",
+    "password": "admin"
+}
 
-def create_access_token(data: Dict) -> str:
-    """
-    Create JWT access token
-    """
-    to_encode = data.copy()
-    expire = datetime.datetime.utcnow() + datetime.timedelta(
-        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-    )
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+@router.post("/login")
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    if (
+        form_data.username != FAKE_USER["username"]
+        or form_data.password != FAKE_USER["password"]
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
 
+    return {
+        "access_token": "fake-jwt-token",
+        "token_type": "bearer"
+    }
 
-def verify_access_token(token: str) -> Dict:
-    """
-    Verify JWT access token
-    """
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
-    except jwt.ExpiredSignatureError:
-        raise Exception("Token expired")
-    except jwt.InvalidTokenError:
-        raise Exception("Invalid token")
+@router.get("/secure-data")
+def secure_data(token: str = Depends(oauth2_scheme)):
+    return {"message": "Secure data accessed"}

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.auth.auth import router as auth_router
+from auth.auth import router as auth_router
 
 app = FastAPI(
     title="Aurexia Zero Trust Security Fabric",
@@ -10,5 +10,4 @@ app = FastAPI(
 def root():
     return {"status": "Backend is running"}
 
-# INCLUDE AUTH ROUTER
-app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
+app.include_router(auth_router)
