@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 
 # =====================
 # CONFIG
 # =====================
-SECRET_KEY = "AUREXIA_SECRET_KEY"  # keep this same every time
+SECRET_KEY = "AUREXIA_SECRET_KEY"  # Keep this same for token validation
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
-bearer_scheme = HTTPBearer()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # =====================
 # FAKE USER STORE
@@ -21,16 +21,6 @@ fake_users_db = {
         "username": "admin",
         "password": "admin123",
         "role": "admin"
-    },
-    "john": {
-        "username": "john",
-        "password": "john123",
-        "role": "user"
-    },
-    "auditor": {
-        "username": "audit",
-        "password": "audit123",
-        "role": "auditor"
     }
 }
 
@@ -44,14 +34,12 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 # =====================
-# LOGIN
+# LOGIN ENDPOINT
 # =====================
-from fastapi import Form
-
 @router.post("/login")
-def login(username: str = Form(...), password: str = Form(...)):
-    user = fake_users_db.get(username)
-    if not user or user["password"] != password:
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = fake_users_db.get(form_data.username)
+    if not user or user["password"] != form_data.password:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
@@ -64,10 +52,9 @@ def login(username: str = Form(...), password: str = Form(...)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 # =====================
-# ZERO TRUST VALIDATION
+# ZERO TRUST TOKEN VALIDATION
 # =====================
-def zero_trust_auth(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
-    token = credentials.credentials
+def zero_trust_auth(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
@@ -85,19 +72,4 @@ def secure_data(user=Depends(zero_trust_auth)):
     return {
         "message": "Zero Trust Access Granted",
         "user": user
-    }
-@router.get("/admin-data")
-def admin_data(user=Depends(zero_trust_auth)):
-    if user.get("role") != "admin":
-        raise HTTPException(
-            status_code=403,
-            detail="Admins only"
-        )
-
-    return {
-        "message": "Admin-level data access granted",
-        "user": {
-            "sub": user["sub"],
-            "role": user["role"]
-        }
     }

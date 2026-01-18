@@ -1,20 +1,10 @@
-# Zero Trust Policy Engine
+from fastapi import HTTPException, status
 
 def evaluate_policy(role: str, resource: str, action: str):
-    """
-    Simple example policy engine.
-    Allows actions based on roles and resources.
-    """
-    # Example policy rules
-    policy_rules = {
-        "admin": ["read", "write", "delete"],
-        "user": ["read", "write"],
-        "guest": ["read"]
-    }
+    if role == "admin":
+        return True
 
-    allowed_actions = policy_rules.get(role, [])
-
-    if action not in allowed_actions:
-        raise PermissionError(f"Role '{role}' is not allowed to perform '{action}' on '{resource}'")
-
-    return True
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Policy Engine: Access denied"
+    )
