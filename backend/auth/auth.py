@@ -1,67 +1,45 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from datetime import datetime, timedelta
-from jose import jwt, JWTError
+from fastapi.security import OAuth2PasswordRequestForm
+from datetime import timedelta
 
-SECRET_KEY = "AUREXIA_SECRET_KEY"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+from app.core.security import verify_password, get_password_hash
+from app.core.token import create_access_token
 
 router = APIRouter(
     prefix="/auth",
-    tags=["Authentication"]
+    tags=["Auth"]
 )
 
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/auth/login"
-)
-
+# TEMP USER DB
 fake_users_db = {
     "admin": {
         "username": "admin",
-        "password": "admin123",
-        "role": "admin"
+        "hashed_password": get_password_hash("admin123")
     }
 }
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 @router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = fake_users_db.get(form_data.username)
-    if not user or user["password"] != form_data.password:
+
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials"
+            detail="Invalid username or password"
         )
 
-    token = create_access_token(
-        {"sub": user["username"], "role": user["role"]},
-        timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    if not verify_password(form_data.password, user["hashed_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password"
+        )
+
+    access_token = create_access_token(
+        data={"sub": user["username"]},
+        expires_delta=timedelta(minutes=30)
     )
 
     return {
-        "access_token": token,
+        "access_token": access_token,
         "token_type": "bearer"
-    }
-
-def zero_trust_auth(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Zero Trust: Invalid token"
-        )
-
-@router.get("/secure-data")
-def secure_data(user=Depends(zero_trust_auth)):
-    return {
-        "message": "Zero Trust Access Granted",
-        "user": user
     }
