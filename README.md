@@ -1,65 +1,94 @@
-# AUREXIA
+# Zero Trust Multicloud Security Fabric
 
-## AI-Native Zero Trust Security Fabric
+Enterprise-grade SaaS security platform designed to protect applications across multiple cloud environments using Zero Trust architecture.
 
-Aurexia is an enterprise-grade security platform that enforces Zero Trust principles across multi-cloud and AI-driven systems.
+## Project Overview
 
-## Why Aurexia?
-Modern enterprises require security that is:
-- Identity-first
-- Policy-driven
-- Cloud-agnostic
-- AI-aware
+Zero Trust Multicloud Security Fabric is a cloud-native security platform that enables secure communication between services deployed across multiple cloud providers.
 
-Aurexia provides a unified control plane for authentication, authorization, policy enforcement, and auditability.
+The system follows a Zero Trust model where every request is verified before access is granted.
 
-## Core Capabilities
-- Zero Trust API Gateway
-- JWT-based Authentication
-- Role-Based Access Control (RBAC)
-- Policy Decision Engine
-- Continuous Audit Logging
-- Multi-Cloud Ready Architecture
-<<<<<<< HEAD
+This project is designed as an enterprise-ready SaaS architecture using modern cloud technologies.
 
-## Technology Stack
-- FastAPI (Backend)
-- Python 3.14+
-- JWT (python-jose)
-- GitHub (CI/CD Ready)
+## Key Features
 
----
-
-## Phase Completion
-
-| Phase | Status |
-|-------|--------|
-| Phase 0 | ✅ Architecture & foundation initialized |
-| Phase 1 | ✅ Backend auth & security base |
-| Phase 2 | 🔄 JWT Auth, RBAC, Gateway, Policy modules |
-
----
-
-## Installation & Running Backend Locally
-
-1. **Clone the repository**:
-
-```bash
-git clone https://github.com/ajayajay01508/zero-trust-multicloud-security-fabric.git
-cd zero-trust-multicloud-security-fabric
-=======
+- Zero Trust authentication and authorization
+- Multi-cloud security architecture
+- Secure API gateway
+- Microservices-based backend
+- JWT-based authentication
+- Role-based access control
+- Anomaly detection for suspicious activities
+- Kubernetes-ready deployment
 
 ## Technology Stack
-- FastAPI (Backend)
+
+**Backend**
 - Python
-- JWT
-- Custom Policy Engine
-- GitHub (CI/CD Ready)
+- FastAPI
+- SQLAlchemy
 
-## Vision
-To become the default Zero Trust security layer for AI and cloud-native enterprises.
+**Security**
+- JWT Authentication
+- Zero Trust Policy Engine
 
----
-🚀 Aurexia is under active development.
+**Infrastructure**
+- Docker
+- Kubernetes
+- Ubuntu
 
->>>>>>> 28d758bb4fe079f977799eead6c72d4c7fed59e2
+**Cloud**
+- Multi-cloud architecture (AWS / Azure / GCP ready)
+
+## System Architecture
+
+User  
+↓  
+API Gateway  
+↓  
+Authentication Service  
+↓  
+Policy Engine  
+↓  
+Microservices  
+↓  
+Database  
+
+## Current Development Status
+
+Project Completion: **40%**
+
+**Completed**
+- Backend API structure
+- User authentication
+- Database models
+- Initial security framework
+
+**In Progress**
+- Kubernetes deployment
+- Multi-cloud configuration
+- Anomaly detection module
+
+## Future Enhancements
+
+- AI-powered threat detection
+- Automated cloud policy enforcement
+- Enterprise monitoring dashboard
+- Multi-region deployment
+
+## Author
+
+**Ajay S**  
+B.Tech Computer Science  
+Jain (Deemed-to-be) University, Bangalore  
+Graduation: 2027
+
+GitHub:  
+https://github.com/ajayajay01508-boop  
+
+LinkedIn:  
+https://www.linkedin.com/in/ajay-s-3708592b4
+
+## Goal
+
+Build an enterprise-grade Zero Trust security platform for multi-cloud environments and deploy it as a scalable SaaS product.
