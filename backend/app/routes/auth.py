@@ -32,23 +32,17 @@ class UserLogin(BaseModel):
 # =========================
 # REGISTER
 # =========================
-
-@router.post("/register")
+    @router.post("/register")
 def register(user: UserRegister, db: Session = Depends(get_db)):
 
     existing_user = db.query(User).filter(User.username == user.username).first()
 
     if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="User already exists"
-        )
-
-    hashed_password = get_password_hash(user.password)
+        raise HTTPException(status_code=400, detail="User already exists")
 
     new_user = User(
         username=user.username,
-        password=hashed_password,
+        password=user.password,
         role=user.role
     )
 
@@ -57,7 +51,6 @@ def register(user: UserRegister, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     return {"message": "User registered successfully"}
-
 
 # =========================
 # LOGIN
